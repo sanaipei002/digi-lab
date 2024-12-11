@@ -23,7 +23,7 @@ SECRET_KEY = os.environ.get(
 )
 DEBUG = os.environ.get("DJANGO_DEBUG")
 # Retrieve ALLOWED_HOSTS as a comma-separated string
-ALLOWED_HOSTS = os.environ.get("PROJECT_ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = os.environ.get("PROJECT_ALLOWED_HOSTS", "127.0.0.1,localhost")
 
 # Split the string into a list of hosts, removing any empty strings caused by trailing commas
 ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOSTS.split(",") if host.strip()]
@@ -93,14 +93,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+
 DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("DB_ENGINE"),
-        "NAME": os.environ.get("DB_NAME"),
-        "USER": os.environ.get("DB_USER"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": os.environ.get("DB_PORT"),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -133,13 +131,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-# STATIC_URL = "static/"
-# STATIC_ROOT = BASE_DIR / "staticfiles"
-# STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_URL = "/var/www/sanaa/static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+# STATIC_URL = "/var/www/sanaa/static/"
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # media
 MEDIA_URL = "/media/"
@@ -221,40 +219,40 @@ sentry_sdk.init(
 
 # SYSTEM LOGGS
 # Get IP address and operating system information
-if DEBUG:
-    ip_address = socket.gethostbyname(socket.gethostname())
-    os_info = platform.platform()
+#if DEBUG:
+    #ip_address = socket.gethostbyname(socket.gethostname())
+    #os_info = platform.platform()
 
-    print(ip_address)
-    print(os_info)
+    #print(ip_address)
+    #print(os_info)
 
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "handlers": {
-            "file": {
-                "level": "DEBUG",
-                "class": "logging.handlers.TimedRotatingFileHandler",
-                "filename": os.path.join(BASE_DIR, ".logs", "system.log"),
-                "when": "midnight",
-                "interval": 1,
-                "backupCount": 7,
-                "formatter": "detailed",
-            },
-        },
-        "formatters": {
-            "detailed": {
-                "format": "%(asctime)s [%(levelname)s] [IP: {}] [OS: {}] - %(message)s".format(
-                    ip_address, os_info
-                ),
-                "datefmt": "%Y-%m-%d %H:%M:%S",
-            },
-        },
-        "loggers": {
-            "django": {
-                "handlers": ["file"],
-                "level": "DEBUG",
-                "propagate": True,
-            },
-        },
-    }
+    #LOGGING = {
+        #"version": 1,
+        #"disable_existing_loggers": False,
+        #"handlers": {
+            #"file": {
+                #"level": "DEBUG",
+                #"class": "logging.handlers.TimedRotatingFileHandler",
+                #"filename": os.path.join(BASE_DIR, ".logs", "system.log"),
+                #"when": "midnight",
+                #"interval": 1,
+                #"backupCount": 7,
+                #"formatter": "detailed",
+            #},
+        #},
+        #"formatters": {
+            #"detailed": {
+               #"format": "%(asctime)s [%(levelname)s] [IP: {}] [OS: {}] - %(message)s".format(
+                    #ip_address, os_info
+                #),
+                #"datefmt": "%Y-%m-%d %H:%M:%S",
+            #},
+        #},
+        #"loggers": {
+            #"django": {
+                #"handlers": ["file"],
+                #"level": "DEBUG",
+                #"propagate": True,
+            #},
+        #},
+    #}
